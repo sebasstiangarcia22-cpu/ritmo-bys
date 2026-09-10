@@ -42,13 +42,6 @@ encabezados mal copiados (dos pestañas distintas dicen "marzo 2026" en su cabec
   después de un valor positivo se trata como día sin cargar y se arrastra el
   anterior. Los ceros del arranque del mes sí son reales.
 
-## Pendiente de revisar
-
-**Junio arranca en $20.269.000 el día 1.** En una serie acumulada que reinicia
-cada mes eso no cuadra: parece un arrastre del mes anterior en la hoja. No lo
-corregí porque no sé si es un error o un ingreso real de ese día. Vale la pena
-confirmarlo.
-
 ## Puesta en marcha
 
 1. [script.google.com](https://script.google.com) → proyecto nuevo → pegar `apps-script/Code.gs`.
