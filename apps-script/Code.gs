@@ -20,9 +20,14 @@ const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
 /** Fila del bloque -> nombre con el que la guardamos. */
 const FILAS = {
   'acumulado total':     'ventas',   // ya viene acumulada
+  'marketing acumulado': 'mkt',      // acumulada — la parte que trae marketing
+  'bys acumulado':       'propio',   // acumulada — la que trae BYS por su cuenta
   'total leads':         'leads',    // diaria
   'total agendamientos': 'agend'     // diaria
 };
+
+/** Las que ya vienen acumuladas en la hoja: se arrastran, no se suman. */
+const ACUMULADAS = ['ventas', 'mkt', 'propio'];
 
 const norm = s => String(s).toLowerCase().trim()
   .normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ');
@@ -109,11 +114,14 @@ function construirPayload() {
     return Math.max(i, 1);
   };
 
-  const data = { ventas: {}, leads: {}, agend: {} };
+  const data = { ventas: {}, mkt: {}, propio: {}, leads: {}, agend: {} };
   const corte = {};
   meses.forEach(function (m) {
     corte[m] = ultimoDia(raw[m].ventas);
     data.ventas[m] = ffill(raw[m].ventas).slice(0, corte[m]);
+    // mkt y propio ya vienen acumuladas en la hoja, igual que ventas
+    if (raw[m].mkt)    data.mkt[m]    = ffill(raw[m].mkt).slice(0, corte[m]);
+    if (raw[m].propio) data.propio[m] = ffill(raw[m].propio).slice(0, corte[m]);
     if (raw[m].leads) data.leads[m] = acum(raw[m].leads).slice(0, corte[m]);
     if (raw[m].agend) data.agend[m] = acum(raw[m].agend).slice(0, corte[m]);
   });
